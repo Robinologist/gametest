@@ -9,44 +9,50 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    //Variables ----------------------------------------------------------------
     var timer: Timer?
     var yVelocity: Double = 0
+    var xVelocity: Double = 0
+    var floorBounds = 700.0
     
-//ViewDidLoad
+    //ViewDidLoad --------------------------------------------------------------
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: (#selector(ViewController.Update)), userInfo: nil, repeats: true)
     }
     
-//Outlets
+    //Outlets ------------------------------------------------------------------
     @IBOutlet var image: UIImageView!
     
+    @IBOutlet var button: UILongPressGestureRecognizer!
+    
     @IBAction func button(_ sender: Any) {
-        yVelocity = -26
+        yVelocity = -20
+        print("a")
     }
     
-//Update
-    @objc func Update() {
+    //@IBAction func button(_ sender: Any) {
+    //    yVelocity = -26
+    //}
+    
+    //Functions -----------------------------------------------------------------
+    
+    func motion() {
         
-        var imageX = image.frame.origin.x
-        var imageY = image.frame.origin.y
-        
-        print(String(yVelocity))
-//Update Gravity
-        if yVelocity < 26 {
+        //Increase yVelo to simulate gravity
+        if self.image.center.y < floorBounds {
             yVelocity += 1
         }
         
-        print(imageY)
-        
-        if imageY > 700 {
-            yVelocity -= 26
-        }
-        
-//Update Motion
         UIView.animate(withDuration: 0, delay: 0, options: .curveLinear, animations: {
-            self.image.center.y += CGFloat(self.yVelocity)
-            })
+            self.image.center.y += self.yVelocity/2
+        })
     }
+    
+    //Update ----------------------------------------------------------------------
+    @objc func Update() {
+        motion()
+    }
+    
 }
